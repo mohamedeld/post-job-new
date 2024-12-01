@@ -18,7 +18,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, href, onCl
     <Link href={href} passHref>
       <ListItem button onClick={onClick} className={className}>
         <ListItemIcon>
-          {Icon && <Icon className={`${isActive ? 'text-gray-200':''}`} />}
+        {Icon && <Icon className={`${isActive ? 'text-[#00000080]':'text-[#7C8493CC]'} w-[20px] h-[20px]`} />}
         </ListItemIcon>
         <ListItemText primary={label} primaryTypographyProps={{ className: classNameText }}/>
         {children}

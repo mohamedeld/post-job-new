@@ -102,7 +102,7 @@ const SidebarRoutes = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full px-4">
       {guestRoutes.map(route => {
         const isActive = pathname === route.href || (route.children && route.children.some(child => pathname === child.href));
         return (
@@ -113,11 +113,11 @@ const SidebarRoutes = () => {
             href={route.href} 
             onClick={() => route.children && handleToggle(route.label)}
             isActive={isActive}
-            className={`flex justify-between ${isActive ? 'bg-green-500 text-gray-200 hover:bg-green-600 ' : ''}`} 
+            className={`flex justify-between ${isActive ? 'bg-[#DEF0EB] text-[#00000080] hover:bg-[#DEF0EB] ' : 'text-[#7C8493CC]'}`} 
           >
             {route.children && (
               <ListItemIcon className='justify-end'>
-                <ChevronDown className={`${isActive ? 'text-gray-200':''} transition-transform ${open[route.label] ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`${isActive ? 'text-[#00000080]':'text-[#7C8493CC]'} transition-transform ${open[route.label] ? 'rotate-180' : ''}`} />
               </ListItemIcon>
             )}
           </SidebarItem>
@@ -131,7 +131,7 @@ const SidebarRoutes = () => {
                       icon={subRoute?.icon} 
                       label={subRoute?.label} 
                       href={subRoute?.href} 
-                      classNameText={pathname === subRoute.href ? 'bg-gray-500 text-gray-800 p-2 rounded-full w-fit ' : ''}
+                      classNameText={pathname === subRoute.href ? 'bg-gray-300 text-[#00000080] text-[12px] p-2 rounded-full w-fit ' : 'text-[#7C8493CC]'}
                     >
                       <></>
                     </SidebarItem>

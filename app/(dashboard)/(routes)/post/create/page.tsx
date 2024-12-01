@@ -1,7 +1,10 @@
 
 const CreatePostPage = () => {
   return (
-    <div>CreatePostPage</div>
+    <div className="p-2">
+      <h1 className="pt-8 pb-4 text-center">Post Job Now</h1>
+      
+    </div>
   )
 }
 
