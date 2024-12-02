@@ -4,9 +4,9 @@
   import Logo from "./Logo";
   import NavbarLinks from "./NavbarLinks";
   import Button from "./Button";
-  import { BellDot } from "lucide-react";
+  import { Bell, BellDot } from "lucide-react";
   import { UserButton } from "@clerk/nextjs";
-
+import { Badge } from "@mui/material";
   const userButtonAppearance = {
     elements: {
       userButtonAvatarBox: "w-10 h-10", // Custom width and height
@@ -23,7 +23,9 @@
         </div>
         <div className="flex items-center gap-6">
           <Button className="outline-none border-none p-2 text-xl font-semibold text-white bg-[#185D43]" text={"Add New Post"} type="button"/>
-          <BellDot className="w-[18px] h-[25px] text-[#25324B]" />
+          <Badge color="secondary" variant="dot" >
+          <Bell className="w-[18px] h-[25px]" />
+</Badge>
           <UserButton
           afterSignOutUrl="/"
           appearance={userButtonAppearance}
