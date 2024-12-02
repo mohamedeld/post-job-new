@@ -1,23 +1,67 @@
+"use client";
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, TextField } from "@mui/material"
-import { Mic, MicIcon, Plus, Type, TypeOutline } from "lucide-react"
+import { Mic, MicIcon, Plus, SquarePen, Trash2, Type, TypeOutline } from "lucide-react"
 import LogoText from "./LogoText";
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import { QuestionProps } from "@/app/(dashboard)/(routes)/post/create/page";
+import { useEffect, useRef, useState } from "react";
 
 type QuestionTypeProps = {
   name:string;
+  register:UseFormRegister<FieldValues>;
+  errors:FieldErrors;
+  onSave: (question: QuestionProps) => void;
+  // onEdit:(id:number)=>void;
+  onDelete:()=>void;
+  question: QuestionProps;
 }
 
-const QuestionType = ({name}:QuestionTypeProps) => {
+const QuestionType = ({name,onDelete,onSave,question}:QuestionTypeProps) => {
+  const [inputValue, setInputValue] = useState<string>(question.question);
+  const accordionRef = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
+
+
+
+  useEffect(() => {
+    setInputValue(question.question); // Update input when question prop changes
+  }, [question]);
+
+  const handleSave = () => {
+    onSave({ ...question, question: inputValue });
+    setInputValue(''); // Clear input after saving
+    setExpanded(false);
+  };
+
+  const toggleExpanded = ()=>{
+    setExpanded(prev => !prev);
+  }
+
   return (
-    <div>
-            <Accordion defaultExpanded>
+    <div className="my-1">
+            <Accordion expanded={expanded} onClick={toggleExpanded}>
         <AccordionSummary sx={{
           backgroundColor:'#D6DDEB2E',
           py:'9px',
           px:"25px"
         }}
-          expandIcon={<div className="border-[1px] border-[#D6DDEB] border-solid p-2">
+          expandIcon={
+            expanded ? (
+              <div className="flex items-center gap-2">
+                
+                <div className="border-[1px] border-[#D6DDEB] border-solid p-2">
+                <Trash2 strokeWidth={2} className="text-[14px] text-red-500 rotate-180" onClick={onDelete} />
+                </div>
+                <div className="border-[1px] border-[#D6DDEB] border-solid p-2">
+                <SquarePen strokeWidth={2} className="text-[14px] text-[#2EAE7D] rotate-180"/>
+                </div>
+              </div>
+            ) : (
+              <div className="border-[1px] border-[#D6DDEB] border-solid p-2">
             <Plus fontSize={"4rem"} color="#2EAE7D" />
-          </div>}
+            </div>
+            ) 
+          }
           aria-controls="panel3-content"
           id="panel3-header"
         >
@@ -39,13 +83,14 @@ const QuestionType = ({name}:QuestionTypeProps) => {
   placeholder="MultiLine with rows: 2 and rowsMax: 4"
   multiline
   rows={2}
-  maxRows={4}
+  value={inputValue}
+  onChange={e => setInputValue(e.target.value)}
   className="w-full bg-gray-100 mt-4"
 />
         </AccordionDetails>
         <AccordionActions>
-          <Button>Cancel</Button>
-          <Button>Agree</Button>
+          <Button onClick={()=> setExpanded(false)}>Cancel</Button>
+          <Button onClick={handleSave}>Agree</Button>
         </AccordionActions>
           </div>
       </Accordion>

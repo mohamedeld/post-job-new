@@ -4,7 +4,7 @@ const RadioInput = () => {
   return (
     <div>
        <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+      <FormLabel className="text-[14px] font-semibold" id="demo-row-radio-buttons-group-label">Send email notification when there are good candidates</FormLabel>
       <RadioGroup
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
