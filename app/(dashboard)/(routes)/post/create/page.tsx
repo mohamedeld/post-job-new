@@ -24,7 +24,7 @@ const CreatePostPage = () => {
     { id: 5, question: '' },
     { id: 6, question: '' }
   ])
-  const {register,handleSubmit,formState:{isSubmitting,errors}} = useForm()
+  const {register,control,handleSubmit,formState:{isSubmitting,errors}} = useForm()
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -81,9 +81,9 @@ const CreatePostPage = () => {
           }
       <h1 className="text-2xl text-[#185D43] font-bold mt-6 mb-5">Job Option</h1>
       <div className="flex items-start justify-between flex-wrap">
-        <CheckBoxInput/>  
+        <CheckBoxInput register={register} errors={errors}/>  
         <div>
-          <RadioInput/>
+          <RadioInput control={control}/>
           <h6 className="text-[#185D43] text-2xl mb-2 font-semibold">Recipient Email</h6>
       {isEditing ? (
         <TextField

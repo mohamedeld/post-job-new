@@ -105,23 +105,39 @@ const SteppersPost = ({children}:StepperPostProps) => {
           <StepperContent title={steps[activeStep]} subTitle={"Add Screening questions to get 5 to 10x better results"}/>
           {children}
           </div>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+          <Box sx={{ display: 'flex',gap:'2.2rem',justifyContent:'flex-end',alignItems:'center', flexDirection: 'row', pt: 2, }}>
             <Button
-              color="inherit"
               disabled={activeStep === 0}
               onClick={handleBack}
-              sx={{ mr: 1 }}
+              sx={{ 
+                background:'#fff',
+                border:'1px solid #D6DDEB',
+              py:'0.8rem',
+              px:'1.3rem',
+              fontSize:'14px',
+              fontWeight:'600',
+              color:'#2EAE7D'  
+              }}
             >
               Back
             </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
+            <Box sx={{  }} />
             {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+              <Button sx={{
+                
+              }} color="inherit" onClick={handleSkip} >
                 Skip
               </Button>
             )}
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            <Button sx={{
+              background:'linear-gradient(#2EAE7D,#134834)',
+              py:'0.8rem',
+              px:'1.3rem',
+              fontSize:'14px',
+              fontWeight:'600',
+              color:'#fff'
+            }} onClick={handleNext}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Save and Publish'}
             </Button>
           </Box>
         </React.Fragment>
