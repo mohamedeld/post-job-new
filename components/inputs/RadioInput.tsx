@@ -6,7 +6,7 @@ type RadioInputProps = {
   errors:FieldErrors;
 }
 
-const RadioInput = ({control}:RadioInputProps) => {
+const RadioInput = ({control,errors}:RadioInputProps) => {
   return (
     <div>
        <FormControl>
