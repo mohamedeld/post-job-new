@@ -3,15 +3,22 @@ import CheckBoxInput from "@/components/inputs/CheckBoxInput"
 import RadioInput from "@/components/inputs/RadioInput"
 import QuestionType from "@/components/QuestionType"
 import SteppersPost from "@/components/SteppersPost"
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, TextField, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export type QuestionProps = {
   id:number;
   question:string;
   audioUrl:string | null;
 }
+
+const schema = z.object({
+  notificationPreference: z.enum(["male", "female"], { errorMap: () => ({ message: "Gender is required" }) }),
+  keepCompanyConfidential: z.boolean(), // Optional checkbox
+})
 
 const CreatePostPage = () => {
   const [email, setEmail] = useState('imetsacademy@gmail.com');
@@ -25,7 +32,9 @@ const CreatePostPage = () => {
     { id: 5, question: '',audioUrl:'' },
     { id: 6, question: '',audioUrl:'' }
   ])
-  const {register,control,handleSubmit,formState:{isSubmitting,errors}} = useForm()
+  const {register,control,handleSubmit,formState:{isSubmitting,errors}} = useForm({
+    resolver: zodResolver(schema),
+  })
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -92,7 +101,7 @@ const CreatePostPage = () => {
       <div className="flex items-start justify-between flex-wrap">
         <CheckBoxInput register={register} errors={errors}/>  
         <div>
-          <RadioInput control={control}/>
+          <RadioInput control={control} errors={errors}/>
           <h6 className="text-[#185D43] text-2xl mb-2 font-semibold">Recipient Email</h6>
       {isEditing ? (
         <TextField

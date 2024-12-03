@@ -1,8 +1,9 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material"
-import { Control, Controller, FieldValues } from "react-hook-form"
+import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form"
 
 type RadioInputProps = {
   control?:any;
+  errors:FieldErrors;
 }
 
 const RadioInput = ({control}:RadioInputProps) => {
@@ -55,6 +56,7 @@ const RadioInput = ({control}:RadioInputProps) => {
               required: 'This field is required',
             }}
           />
+           {errors?.notificationPreference && <span>{errors?.notificationPreference?.message as string}</span>}
         </RadioGroup>
     </FormControl>
     </div>
