@@ -3,10 +3,9 @@
   import { usePathname } from "next/navigation"
   import Logo from "./Logo";
   import NavbarLinks from "./NavbarLinks";
-  import Button from "./Button";
   import { Bell, BellDot } from "lucide-react";
   import { UserButton } from "@clerk/nextjs";
-import { Badge } from "@mui/material";
+import { Badge, Button } from "@mui/material";
   const userButtonAppearance = {
     elements: {
       userButtonAvatarBox: "w-10 h-10", // Custom width and height
@@ -22,7 +21,15 @@ import { Badge } from "@mui/material";
         <NavbarLinks/>
         </div>
         <div className="flex items-center gap-6">
-          <Button className="outline-none border-none p-2 text-xl font-semibold text-white bg-[#185D43]" text={"Add New Post"} type="button"/>
+          <Button sx={{
+            background:'linear-gradient(#2EAE7D,#134834)',
+            py:'0.8rem',
+            px:'1.3rem',
+            fontSize:'14px',
+            fontWeight:'600',
+            color:'#fff',
+            textTransform:"capitalize"
+          }}>Add New Post</Button>
           <Badge color="secondary" variant="dot" >
           <Bell className="w-[18px] h-[25px]" />
 </Badge>

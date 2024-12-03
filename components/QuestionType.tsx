@@ -20,15 +20,48 @@ const QuestionType = ({name,onDelete,onSave,question}:QuestionTypeProps) => {
   const [inputValue, setInputValue] = useState<string>(question.question);
   const accordionRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
-
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const audioUrlRef = useRef<string | null>(null);
 
 
   useEffect(() => {
     setInputValue(question.question); // Update input when question prop changes
   }, [question]);
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
 
+      recorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        audioUrlRef.current = URL.createObjectURL(blob);
+        setAudioBlob(blob);
+        audioChunksRef.current = []; // Reset for the next recording
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+    }
+    setIsRecording(false);
+  };
   const handleSave = () => {
-    onSave({ ...question, question: inputValue });
+    onSave({ ...question, question: inputValue, audioUrl: audioUrlRef?.current  });
     setInputValue(''); // Clear input after saving
     setExpanded(false);
   };
@@ -39,8 +72,8 @@ const QuestionType = ({name,onDelete,onSave,question}:QuestionTypeProps) => {
 
   return (
     <div className="my-1">
-            <Accordion expanded={expanded} onClick={toggleExpanded}>
-        <AccordionSummary sx={{
+            <Accordion expanded={expanded}>
+        <AccordionSummary onClick={toggleExpanded} sx={{
           backgroundColor:'#D6DDEB2E',
           py:'9px',
           px:"25px"
@@ -76,7 +109,7 @@ const QuestionType = ({name,onDelete,onSave,question}:QuestionTypeProps) => {
             <h2 className="text-[14px] text-[#000] font-semibold">Question Type : <span className="uppercase">{name}</span></h2>
             <div className="flex items-center gap-2">
             <LogoText parentClassName="bg-[#2EAE7D]" Icon={Type} className="text-[0.5rem] text-white " />
-            <Mic strokeWidth={2} className="text-[#2EAE7D]"/>
+            <Mic strokeWidth={2} className={`text-[#2EAE7D]${isRecording ? 'rotate-180' : ''}`} onClick={isRecording ? stopRecording : startRecording}/>
             </div>
             </header>
             <TextField
@@ -89,8 +122,23 @@ const QuestionType = ({name,onDelete,onSave,question}:QuestionTypeProps) => {
 />
         </AccordionDetails>
         <AccordionActions>
-          <Button onClick={()=> setExpanded(false)}>Cancel</Button>
-          <Button onClick={handleSave}>Agree</Button>
+          <Button sx={{
+            background:'#fff',
+            border:'1px solid #D6DDEB',
+          py:'0.8rem',
+          px:'1.3rem',
+          fontSize:'14px',
+          fontWeight:'600',
+          color:'#2EAE7D'
+          }} onClick={()=> setExpanded(false)}>Cancel</Button>
+          <Button onClick={handleSave} sx={{
+            background:'linear-gradient(#2EAE7D,#134834)',
+            py:'0.8rem',
+            px:'1.3rem',
+            fontSize:'14px',
+            fontWeight:'600',
+            color:'#fff'
+          }}>Agree</Button>
         </AccordionActions>
           </div>
       </Accordion>

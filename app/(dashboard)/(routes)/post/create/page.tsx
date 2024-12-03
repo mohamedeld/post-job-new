@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 export type QuestionProps = {
   id:number;
   question:string;
+  audioUrl:string | null;
 }
 
 const CreatePostPage = () => {
@@ -17,12 +18,12 @@ const CreatePostPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [questions, setQuestions] = useState<Array<QuestionProps>>([
-    { id: 1, question: '' },
-    { id: 2, question: '' },
-    { id: 3, question: '' },
-    { id: 4, question: '' },
-    { id: 5, question: '' },
-    { id: 6, question: '' }
+    { id: 1, question: '',audioUrl:'' },
+    { id: 2, question: '',audioUrl:'' },
+    { id: 3, question: '',audioUrl:'' },
+    { id: 4, question: '',audioUrl:'' },
+    { id: 5, question: '',audioUrl:'' },
+    { id: 6, question: '',audioUrl:'' }
   ])
   const {register,control,handleSubmit,formState:{isSubmitting,errors}} = useForm()
 
@@ -60,13 +61,21 @@ const CreatePostPage = () => {
       )
     );
   };
+  const onSubmit = (data:any)=>{
+    console.log({
+      email: isEditing ? newEmail : email,
+      questions,
+      notificationPreference: data?.notificationPreference,
+      keepCompanyConfidential: data?.keepCompanyConfidential
+    })
+  }
   return (
     <div className="py-2 px-8">
       <h1 className="py-8 text-center text-[25px] font-bold">Post Job Now</h1>
 
       {/* steps */}
       <div className="bg-[#F8F8FD99] p-14 border-[1px] border-[#D6DDEB] border-solid">
-        <SteppersPost>
+        <SteppersPost onSubmit={onSubmit} handleSubmit={handleSubmit}>
           {
             questions?.map((question,index)=>{
               return (

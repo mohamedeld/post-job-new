@@ -3,15 +3,18 @@
 import { Box, Button, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import StepperContent from "./StepperContent";
+import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 
 const steps = ['Job Details', 'Screening Questions', 'Review & Publist'];
 
 type StepperPostProps = {
-  children:React.ReactNode
+  children:React.ReactNode;
+  onSubmit:(data:any)=> void;
+  handleSubmit:UseFormHandleSubmit<FieldValues, undefined>;
 }
 
-const SteppersPost = ({children}:StepperPostProps) => {
-  const [activeStep, setActiveStep] = useState(0);
+const SteppersPost = ({children,onSubmit,handleSubmit}:StepperPostProps) => {
+  const [activeStep, setActiveStep] = useState(1);
   const [skipped, setSkipped] = useState(new Set<number>());
 
   const isStepOptional = (step: number) => {
@@ -100,46 +103,53 @@ const SteppersPost = ({children}:StepperPostProps) => {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <div className="mt-6 px-5 py-2 border-[1px] border-solid border-[#D6DDEB]">
-
-          <StepperContent title={steps[activeStep]} subTitle={"Add Screening questions to get 5 to 10x better results"}/>
-          {children}
-          </div>
-          <Box sx={{ display: 'flex',gap:'2.2rem',justifyContent:'flex-end',alignItems:'center', flexDirection: 'row', pt: 2, }}>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ 
-                background:'#fff',
-                border:'1px solid #D6DDEB',
-              py:'0.8rem',
-              px:'1.3rem',
-              fontSize:'14px',
-              fontWeight:'600',
-              color:'#2EAE7D'  
-              }}
-            >
-              Back
-            </Button>
-            <Box sx={{  }} />
-            {isStepOptional(activeStep) && (
-              <Button sx={{
-                
-              }} color="inherit" onClick={handleSkip} >
-                Skip
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="mt-6 px-5 py-2 border-[1px] border-solid border-[#D6DDEB]">
+            <StepperContent title={steps[activeStep]} subTitle={"Add Screening questions to get 5 to 10x better results"}/>
+            {children}
+            </div>
+            <Box sx={{ display: 'flex',gap:'2.2rem',justifyContent:'flex-end',alignItems:'center', flexDirection: 'row', pt: 2, }}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{
+                  background:'#fff',
+                  border:'1px solid #D6DDEB',
+                py:'0.8rem',
+                px:'1.3rem',
+                fontSize:'14px',
+                fontWeight:'600',
+                color:'#2EAE7D'
+                }}
+              >
+                Back
               </Button>
-            )}
-            <Button sx={{
-              background:'linear-gradient(#2EAE7D,#134834)',
-              py:'0.8rem',
-              px:'1.3rem',
-              fontSize:'14px',
-              fontWeight:'600',
-              color:'#fff'
-            }} onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Save and Publish'}
-            </Button>
-          </Box>
+              <Box sx={{  }} />
+              {isStepOptional(activeStep) && (
+                <Button sx={{
+                  background:'#fff',
+                  border:'1px solid #D6DDEB',
+                py:'0.8rem',
+                px:'1.3rem',
+                fontSize:'14px',
+                fontWeight:'600',
+                color:'#2EAE7D'
+                }} color="inherit" onClick={handleSkip} >
+                  Save Later
+                </Button>
+              )}
+              <Button sx={{
+                background:'linear-gradient(#2EAE7D,#134834)',
+                py:'0.8rem',
+                px:'1.3rem',
+                fontSize:'14px',
+                fontWeight:'600',
+                color:'#fff'
+              }} onClick={handleNext} type="submit">
+                {activeStep === steps.length - 1 ? 'Finish' : 'Save and Publish'}
+              </Button>
+            </Box>
+          </form>
         </React.Fragment>
       )}
     </Box>
